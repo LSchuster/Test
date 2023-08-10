@@ -28,10 +28,10 @@ write-host "Download and unpack agent files"
 Invoke-WebRequest $url -Out agent.zip
 Expand-Archive -Path agent.zip -DestinationPath $PWD
 
-write-host "Configure <AGENT_NAME>"
+write-host "Configure $agentName"
 .\config.cmd --unattended --url $url --auth pat --token $pat --pool $poolName --agent $agentName --acceptTeeEula --runAsService
 
-write-host "Start <AGENT_NAME>"
+write-host "Start $agentName"
 .\start
 
 
