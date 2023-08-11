@@ -38,7 +38,7 @@ new-item -ItemType Directory -Force -Path "c:\agent"
 set-location "c:\agent"
 
 Write-Host "*** Download agent ***"
-$wr = Invoke-WebRequest https://api.github.com/repos/Microsoft/azure-pipelines-agent/releases/latest
+$wr = Invoke-WebRequest https://api.github.com/repos/Microsoft/azure-pipelines-agent/releases/latest -UseBasicParsing
 $tag = ($wr | ConvertFrom-Json)[0].tag_name
 $tag = $tag.Substring(1)
 
@@ -46,7 +46,7 @@ write-host "$tag is the latest version"
 $url = "https://vstsagentpackage.azureedge.net/agent/$tag/vsts-agent-win-x64-$tag.zip"
 
 write-host "*** Download and unpack agent files ***"
-Invoke-WebRequest $url -Out agent.zip
+Invoke-WebRequest $url -Out agent.zip -UseBasicParsing
 Expand-Archive -Path agent.zip -DestinationPath $PWD
 
 write-host "*** Configure $agentName ***"
