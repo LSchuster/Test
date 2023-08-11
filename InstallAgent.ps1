@@ -50,6 +50,9 @@ write-host "*** Download and unpack agent files ***"
 Invoke-WebRequest $urlDevOps -Out agent.zip -UseBasicParsing
 Expand-Archive -Path agent.zip -DestinationPath $PWD
 
+# Write-Host "*** Remove old Agent ***"
+# .\config.cmd remove --auth 'PAT' --token $pat
+
 write-host "*** Configure $agentName ***"
 cmd /c C:\agent\config.cmd --unattended --url $url --auth pat --token $pat --pool $poolName --agent $agentName --acceptTeeEula --runAsService
 
