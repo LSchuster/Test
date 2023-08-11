@@ -55,7 +55,9 @@ Write-Host $url
 Write-Host $pat
 Write-Host $poolName
 Write-Host $agentName
-.\config.cmd --unattended --url $url --auth pat --token $pat --pool $poolName --agent $agentName --acceptTeeEula --runAsService
+
+cmd /c C:\agent\config.cmd --unattended --url $url --auth pat --token $pat --pool $poolName --agent $agentName --acceptTeeEula --runAsService
+# .\config.cmd --unattended --url $url --auth pat --token $pat --pool $poolName --agent $agentName --acceptTeeEula --runAsService
 
 write-host "*** Start $agentName ***"
 .\run
