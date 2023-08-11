@@ -2,7 +2,8 @@ param(
     $url,
     $pat,
     $poolName,
-    $agentName
+    $agentName,
+    $projectName
 )
 
 Start-Transcript -path C:\InstallAgentLog.txt -append
@@ -85,7 +86,7 @@ Start-Process vs_setup.exe -ArgumentList "--installPath $env:USERPROFILE\vs_Buil
 [Environment]::SetEnvironmentVariable('Path', "$([Environment]::GetEnvironmentVariable('Path', 'Machine'));$env:USERPROFILE\vs_BuildTools2022", 'Machine')
 
 Write-Host "*** Restart Agent Service ***"
-$serviceName="vstsagent.amedes.Azure Integration Platform.$agentName"
+$serviceName="vstsagent.$projectName.Azure Integration Platform.$agentName"
 Restart-Service -Name $serviceName
 Stop-Transcript
 
