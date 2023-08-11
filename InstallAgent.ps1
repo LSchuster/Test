@@ -50,17 +50,43 @@ Invoke-WebRequest $urlDevOps -Out agent.zip -UseBasicParsing
 Expand-Archive -Path agent.zip -DestinationPath $PWD
 
 write-host "*** Configure $agentName ***"
-Write-Host "$PWD"
-Write-Host $url
-Write-Host $pat
-Write-Host $poolName
-Write-Host $agentName
-
 cmd /c C:\agent\config.cmd --unattended --url $url --auth pat --token $pat --pool $poolName --agent $agentName --acceptTeeEula --runAsService
-# .\config.cmd --unattended --url $url --auth pat --token $pat --pool $poolName --agent $agentName --acceptTeeEula --runAsService
 
 write-host "*** Start $agentName ***"
 .\run
+
+Write-Host "*** Create Working Directory ***"
+if (test-path "c:\AgentInstallations") {
+    Write-Host "Remove c:\AgentInstallations"
+    Remove-Item -Path "c:\AgentInstallations" -Force -Confirm:$false -Recurse
+}
+new-item -ItemType Directory -Force -Path "c:\AgentInstallations"
+set-location "c:\AgentInstallations"
+
+Write-Host "*** Install Dotnet ***"
+Invoke-WebRequest -Uri https://dot.net/v1/dotnet-install.ps1 -OutFile .\dotnet-install.ps1; 
+.\dotnet-install.ps1
+
+Write-Host "*** Install PWSH ***"
+Invoke-WebRequest -Uri https://github.com/PowerShell/PowerShell/releases/download/v7.3.6/PowerShell-7.3.6-win-x64.msi -OutFile .\powerShellInstall.msi; 
+msiexec.exe /package powerShellInstall.msi /quiet ADD_EXPLORER_CONTEXT_MENU_OPENPOWERSHELL=1 ADD_FILE_CONTEXT_MENU_RUNPOWERSHELL=1 ENABLE_PSREMOTING=1 REGISTER_MANIFEST=1 USE_MU=1 ENABLE_MU=1 ADD_PATH=1
+
+# Visual Studio build tools
+Write-Host "*** Install VS 22 ***"
+Write-Host "Installing visual studio build tools..." -ForegroundColor Cyan
+cd $env:USERPROFILE
+$exePath = "$env:TEMP\vs.exe"
+Invoke-WebRequest -Uri https://aka.ms/vs/17/release/vs_BuildTools.exe -UseBasicParsing -OutFile $exePath
+Write-Host "layout..." -ForegroundColor Cyan
+Start-Process $exePath -ArgumentList "--layout .\vs_BuildTools --quiet" -Wait
+cd vs_BuildTools
+Write-Host "actual installation..." -ForegroundColor Cyan
+Start-Process vs_setup.exe -ArgumentList "--installPath $env:USERPROFILE\vs_BuildTools2022 --nocache --wait --noUpdateInstaller --noWeb --add Microsoft.VisualStudio.Workload.Azure;includeRecommended;includeOptional --quiet --norestart" -Wait
+[Environment]::SetEnvironmentVariable('Path', "$([Environment]::GetEnvironmentVariable('Path', 'Machine'));$env:USERPROFILE\vs_BuildTools2022", 'Machine')
+
+Write-Host "*** Restart Agent Service ***"
+$serviceName="vstsagent.amedes.Azure Integration Platform.$agentName"
+Restart-Service -Name $serviceName
 Stop-Transcript
 
 exit 0
