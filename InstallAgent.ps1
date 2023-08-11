@@ -51,6 +51,10 @@ Expand-Archive -Path agent.zip -DestinationPath $PWD
 
 write-host "*** Configure $agentName ***"
 Write-Host "$PWD"
+Write-Host $url
+Write-Host $pat
+Write-Host $poolName
+Write-Host $agentName
 .\config.cmd --unattended --url $url --auth pat --token $pat --pool $poolName --agent $agentName --acceptTeeEula --runAsService
 
 write-host "*** Start $agentName ***"
