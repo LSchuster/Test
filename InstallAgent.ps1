@@ -43,10 +43,10 @@ $tag = ($wr | ConvertFrom-Json)[0].tag_name
 $tag = $tag.Substring(1)
 
 write-host "$tag is the latest version"
-$url = "https://vstsagentpackage.azureedge.net/agent/$tag/vsts-agent-win-x64-$tag.zip"
+$urlDevOps = "https://vstsagentpackage.azureedge.net/agent/$tag/vsts-agent-win-x64-$tag.zip"
 
 write-host "*** Download and unpack agent files ***"
-Invoke-WebRequest $url -Out agent.zip -UseBasicParsing
+Invoke-WebRequest $urlDevOps -Out agent.zip -UseBasicParsing
 Expand-Archive -Path agent.zip -DestinationPath $PWD
 
 write-host "*** Configure $agentName ***"
