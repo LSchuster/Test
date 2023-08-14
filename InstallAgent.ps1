@@ -79,16 +79,16 @@ msiexec.exe /package powerShellInstall.msi /quiet ADD_EXPLORER_CONTEXT_MENU_OPEN
 
 # Visual Studio build tools
 Write-Host "*** Install VS 22 ***"
-Write-Host "Installing visual studio build tools..." -ForegroundColor Cyan
+Write-Host "Installing visual studio" -ForegroundColor Cyan
 cd $env:USERPROFILE
 $exePath = "$env:TEMP\vs.exe"
-Invoke-WebRequest -Uri https://aka.ms/vs/17/release/vs_BuildTools.exe -UseBasicParsing -OutFile $exePath
+Invoke-WebRequest -Uri https://aka.ms/vs/17/release/vs_professional.exe -UseBasicParsing -OutFile $exePath
 Write-Host "layout..." -ForegroundColor Cyan
-Start-Process $exePath -ArgumentList "--layout .\vs_BuildTools --quiet" -Wait
+Start-Process $exePath -ArgumentList "--layout .\vs_professional --quiet" -Wait
 cd vs_BuildTools
 Write-Host "actual installation..." -ForegroundColor Cyan
-Start-Process vs_setup.exe -ArgumentList "--installPath $env:USERPROFILE\vs_BuildTools2022 --nocache --wait --noUpdateInstaller --noWeb --add Microsoft.VisualStudio.Workload.Azure;includeRecommended;includeOptional --quiet --norestart" -Wait
-[Environment]::SetEnvironmentVariable('Path', "$([Environment]::GetEnvironmentVariable('Path', 'Machine'));$env:USERPROFILE\vs_BuildTools2022", 'Machine')
+Start-Process vs_professional.exe -ArgumentList "--installPath $env:USERPROFILE\vs_professional --nocache --wait --noUpdateInstaller --noWeb --add Microsoft.VisualStudio.Workload.Azure;includeRecommended;includeOptional --quiet --norestart" -Wait
+[Environment]::SetEnvironmentVariable('Path', "$([Environment]::GetEnvironmentVariable('Path', 'Machine'));$env:USERPROFILE\vs_professional", 'Machine')
 
 Write-Host "*** Restart Agent Service ***"
 $serviceName="vstsagent.$projectName.Azure Integration Platform.$agentName"
