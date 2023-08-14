@@ -56,8 +56,8 @@ Expand-Archive -Path agent.zip -DestinationPath $PWD
 write-host "*** Configure $agentName ***"
 cmd /c C:\agent\config.cmd --unattended --url $url --auth pat --token $pat --pool $poolName --agent $agentName --acceptTeeEula --runAsService
 
-write-host "*** Start $agentName ***"
-.\run
+#write-host "*** Start $agentName ***"
+#.\run
 
 Write-Host "*** Create Working Directory ***"
 if (test-path "c:\AgentInstallations") {
