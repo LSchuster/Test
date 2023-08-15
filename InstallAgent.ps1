@@ -78,17 +78,17 @@ Invoke-WebRequest -Uri https://github.com/PowerShell/PowerShell/releases/downloa
 msiexec.exe /package powerShellInstall.msi /quiet ADD_EXPLORER_CONTEXT_MENU_OPENPOWERSHELL=1 ADD_FILE_CONTEXT_MENU_RUNPOWERSHELL=1 ENABLE_PSREMOTING=1 REGISTER_MANIFEST=1 USE_MU=1 ENABLE_MU=1 ADD_PATH=1
 
 # Visual Studio build tools
-Write-Host "*** Install VS 22 ***"
-Write-Host "Installing visual studio" -ForegroundColor Cyan
-cd $env:USERPROFILE
-$exePath = "$env:TEMP\vs.exe"
-Invoke-WebRequest -Uri https://aka.ms/vs/17/release/vs_professional.exe -UseBasicParsing -OutFile $exePath
-Write-Host "layout..." -ForegroundColor Cyan
-Start-Process $exePath -ArgumentList "--layout .\vs_professional --quiet" -Wait
-cd vs_BuildTools
-Write-Host "actual installation..." -ForegroundColor Cyan
-Start-Process vs_professional.exe -ArgumentList "--installPath $env:USERPROFILE\vs_professional --nocache --wait --noUpdateInstaller --noWeb --add Microsoft.VisualStudio.Workload.Azure;includeRecommended;includeOptional --quiet --norestart" -Wait
-[Environment]::SetEnvironmentVariable('Path', "$([Environment]::GetEnvironmentVariable('Path', 'Machine'));$env:USERPROFILE\vs_professional", 'Machine')
+#Write-Host "*** Install VS 22 ***"
+#Write-Host "Installing visual studio" -ForegroundColor Cyan
+#cd $env:USERPROFILE
+#$exePath = "$env:TEMP\vs.exe"
+#Invoke-WebRequest -Uri https://aka.ms/vs/17/release/vs_professional.exe -UseBasicParsing -OutFile $exePath
+#Write-Host "layout..." -ForegroundColor Cyan
+#Start-Process $exePath -ArgumentList "--layout .\vs_professional --quiet" -Wait
+#cd vs_BuildTools
+#Write-Host "actual installation..." -ForegroundColor Cyan
+#Start-Process vs_professional.exe -ArgumentList "--installPath $env:USERPROFILE\vs_professional --nocache --wait --noUpdateInstaller --noWeb --add Microsoft.VisualStudio.Workload.Azure;includeRecommended;includeOptional --quiet --norestart" -Wait
+#[Environment]::SetEnvironmentVariable('Path', "$([Environment]::GetEnvironmentVariable('Path', 'Machine'));$env:USERPROFILE\vs_professional", 'Machine')
 
 Write-Host "*** Restart Agent Service ***"
 $serviceName="vstsagent.$projectName.Azure Integration Platform.$agentName"
